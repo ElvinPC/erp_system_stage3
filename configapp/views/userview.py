@@ -38,6 +38,15 @@ class UserApi(APIView):
         user = get_object_or_404(User, pk=pk)
         user.delete()
         return Response({"detail": "O'chirildi"}, status=status.HTTP_204_NO_CONTENT)
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from drf_yasg.utils import swagger_auto_schema
+
+from configapp.models.teachermodel import Teacher
+from configapp.serializers.Crud_user import UserSerializers
+from configapp.serializers.Crud_teacher import TeacherSerializers
+
 
 class TeacherAndUser(APIView):
 
@@ -49,14 +58,29 @@ class TeacherAndUser(APIView):
             user = user_serializer.save(is_teacher=True)
         else:
             return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        teacher = request.data.get('teacher', None)
-        teacher_serializer = TeacherSerializers(data=teacher)
+
+        teacher_data = request.data.get('teacher', None)
+        teacher_serializer = TeacherSerializers(data=teacher_data)
         if teacher_serializer.is_valid():
-            teacher_serializer.save(user_id=user)
+            teacher_serializer.save(user=user)
         else:
             user.delete()
             return Response(teacher_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
         return Response({
             "user": user_serializer.data,
             "teacher": teacher_serializer.data
         }, status=status.HTTP_201_CREATED)
+
+    @swagger_auto_schema(responses={200: TeacherPostSerializer(many=True)})
+    def get(self, request):
+        teachers = Teacher.objects.select_related('user').all()
+        data = []
+        for teacher in teachers:
+            teacher_data = TeacherSerializers(teacher).data
+            user_data = UserSerializers(teacher.user).data
+            data.append({
+                "teacher": teacher_data,
+                "user": user_data
+            })
+        return Response(data, status=status.HTTP_200_OK)

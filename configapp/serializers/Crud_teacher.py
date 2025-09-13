@@ -3,12 +3,14 @@ from rest_framework import serializers
 
 from configapp.models.teachermodel import Teacher
 
+user = serializers.IntegerField(source='user.id', read_only=True)  # GET paytida faqat id qaytaradi
+
 
 class TeacherSerializers(serializers.ModelSerializer):
     class Meta:
         model = Teacher
         fields = ['name', 'surname', 'address']
-        read_only_fields = ["user_id"]
+        read_only_fields = ["user"]
 # class AddUserSerializers(serializers.ModelSerializer):
 #     is_active =serializers.BooleanField(read_only=True)
 #     is_teacher =serializers.BooleanField(read_only=True)
