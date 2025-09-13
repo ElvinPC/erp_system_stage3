@@ -4,6 +4,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from drf_yasg.utils import swagger_auto_schema
 from configapp.models.usermodel import User
+from configapp.serializers import TeacherPostSerializer
+from configapp.serializers.Crud_teacher import TeacherSerializers
 from configapp.serializers.Crud_user import UserSerializers
 
 class UserApi(APIView):
@@ -36,3 +38,25 @@ class UserApi(APIView):
         user = get_object_or_404(User, pk=pk)
         user.delete()
         return Response({"detail": "O'chirildi"}, status=status.HTTP_204_NO_CONTENT)
+
+class TeacherAndUser(APIView):
+
+    @swagger_auto_schema(request_body=TeacherPostSerializer)
+    def post(self, request):
+        user_data = request.data.get('user', None)
+        user_serializer = UserSerializers(data=user_data)
+        if user_serializer.is_valid():
+            user = user_serializer.save(is_teacher=True)
+        else:
+            return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        teacher = request.data.get('teacher', None)
+        teacher_serializer = TeacherSerializers(data=teacher)
+        if teacher_serializer.is_valid():
+            teacher_serializer.save(user_id=user)
+        else:
+            user.delete()
+            return Response(teacher_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({
+            "user": user_serializer.data,
+            "teacher": teacher_serializer.data
+        }, status=status.HTTP_201_CREATED)
