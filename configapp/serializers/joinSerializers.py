@@ -6,5 +6,5 @@ from configapp.serializers.Crud_user import UserSerializers
 
 
 class TeacherPostSerializer(serializers.Serializer):
+    user = UserSerializers()
     teacher=TeacherSerializers()
-    user=UserSerializers()
