@@ -5,8 +5,8 @@ from rest_framework import status
 from drf_yasg.utils import swagger_auto_schema
 from configapp.models.usermodel import User
 from configapp.serializers import TeacherPostSerializer
-from configapp.serializers.Crud_teacher import TeacherSerializers
-from configapp.serializers.Crud_user import UserSerializers
+from configapp.serializers.teacherserializers import TeacherSerializers
+from configapp.serializers.userserializers import UserSerializers
 
 class UserApi(APIView):
 
@@ -44,8 +44,8 @@ from rest_framework import status
 from drf_yasg.utils import swagger_auto_schema
 
 from configapp.models.teachermodel import Teacher
-from configapp.serializers.Crud_user import UserSerializers
-from configapp.serializers.Crud_teacher import TeacherSerializers
+from configapp.serializers.userserializers import UserSerializers
+from configapp.serializers.teacherserializers import TeacherSerializers
 
 
 class TeacherAndUser(APIView):

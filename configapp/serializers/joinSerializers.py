@@ -1,8 +1,8 @@
 from configapp.models import *
 from rest_framework import serializers
 
-from configapp.serializers.Crud_teacher import TeacherSerializers
-from configapp.serializers.Crud_user import UserSerializers
+from configapp.serializers.teacherserializers import TeacherSerializers
+from configapp.serializers.userserializers import UserSerializers
 
 
 class TeacherPostSerializer(serializers.Serializer):

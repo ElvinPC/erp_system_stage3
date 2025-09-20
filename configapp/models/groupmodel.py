@@ -1,6 +1,8 @@
 from configapp.models import *
 from django.db import models
 
+from configapp.models.teachermodel import Teacher
+
 
 class Day(BaseModel):
     title = models.CharField(max_length=50)

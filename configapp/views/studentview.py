@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from drf_yasg.utils import swagger_auto_schema
 from configapp.models.studentmodel import Student
-from configapp.serializers.Crud_student import StudentSerializers
+from configapp.serializers.studentserializers import StudentSerializers
 from django.shortcuts import get_object_or_404
 
 class StudentApi(APIView):

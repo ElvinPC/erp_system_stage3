@@ -1,20 +1,12 @@
-from drf_yasg.utils import swagger_auto_schema
-from rest_framework import serializers
-from rest_framework.response import Response
-from rest_framework.views import APIView
 from django.core.cache import cache
-from rest_framework import serializers
 from configapp.models import User
+from rest_framework import serializers
 
 
 class SendEmailSerializer(serializers.Serializer):
     email = serializers.EmailField()
     text = serializers.CharField()
-from rest_framework import serializers
-from django.core.cache import cache
 
-from rest_framework import serializers
-from django.core.cache import cache
 
 class VerifyEmailSerializer(serializers.Serializer):
     email = serializers.EmailField()
@@ -43,26 +35,9 @@ class VerifyEmailSerializer(serializers.Serializer):
 
 class SendEmailSerializers(serializers.Serializer):
     email = serializers.EmailField()
-class VerifyApi(APIView):
-    # permission_classes = [IsEmailVerified]
-    @swagger_auto_schema(request_body=VerifyEmailSerializer)
-    def post(self,request):
-        serializer = VerifyEmailSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        email = serializer.validated_data.get('email')
-        verify_kod = serializer.validated_data['verify_kod']
-        cache_cod = str(cache.get(email))
-        if verify_kod == cache_cod:
-            cache.set(f"{email}_verified", True, 600)
-            return Response({
-                'status': True,
-                'detail': 'OTP matched'
-            })
-        else:
-            return Response({
-                'status': False,
-                'detail': 'In Correct'
-            })
+
+
+
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -79,11 +54,9 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         email = attrs.get('email')
-        verified = cache.get(f"verified_{email}")  # verify qilinganini tekshiradi
+        verified = cache.get(f"verified_{email}")
         if not verified:
             raise serializers.ValidationError({
                 "email": "Bu email hali tasdiqlanmagan."
             })
         return attrs
-
-

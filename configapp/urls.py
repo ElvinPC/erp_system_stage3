@@ -1,11 +1,8 @@
 from rest_framework.routers import DefaultRouter
+
 from configapp.views import *
 from django.urls import path,include
-
-from configapp.serializers.Crud_login import VerifyApi
-from configapp.serializers.Crud_teacher import SendSmsAPIView, VerifyCodeApiView
-from configapp.views import SendEmailApi
-from configapp.views.registerview import RegisterApi
+from configapp.views.registerview import *
 
 router = DefaultRouter()
 # router.register(r'teachers',TeacherCreateApi)
